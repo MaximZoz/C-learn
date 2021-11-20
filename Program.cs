@@ -6,26 +6,15 @@ namespace ConsoleApp1
     {
         static void Main(string[] args)
         {
-
-            Console.WriteLine("Hello");
-            Console.WriteLine("What is your name?");
-            string name = Console.ReadLine();
-
-
-            Console.WriteLine("How old are you?");
-            int age = Convert.ToInt32(Console.ReadLine());
-            string answer = $"Name: {name}, Age: {age}";
-
-            Console.WriteLine(answer);
-
-            int? a = null;
-            a?.ToString();
-
-            Console.WriteLine(a);
-
-
-
-
+            Console.Write("первое число:");
+            string a = Console.ReadLine();
+            Console.Write("второе число:");
+            string b = Console.ReadLine();
+            Console.Write("третье число:");
+            string c = Console.ReadLine();
+            Console.Write("четвётрое число:");
+            string d = Console.ReadLine();
+            Console.WriteLine($"Вы ввели числа: {a} {b} {c} {d}");
         }
     }
 }
