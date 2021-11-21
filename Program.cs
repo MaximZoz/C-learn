@@ -6,15 +6,8 @@ namespace ConsoleApp1
     {
         static void Main(string[] args)
         {
-            Console.Write("первое число:");
-            string a = Console.ReadLine();
-            Console.Write("второе число:");
-            string b = Console.ReadLine();
-            Console.Write("третье число:");
-            string c = Console.ReadLine();
-            Console.Write("четвётрое число:");
-            string d = Console.ReadLine();
-            Console.WriteLine($"Вы ввели числа: {a} {b} {c} {d}");
+            const double E = 2.781281;
+            Console.WriteLine("{0: 0.00}", E);/* Console.WriteLine(Math.Round(Math.E, 2)); */
         }
     }
 }
