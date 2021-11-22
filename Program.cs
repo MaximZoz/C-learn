@@ -6,16 +6,19 @@ namespace ConsoleApp1
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("Введите длину стороны квадрата:  ");
-            float s = Convert.ToSingle(Console.ReadLine());
-
-            if (s > 0)
+            Console
+                .WriteLine("For figure out diameter of circle, input value of radius: ");
+            double radius = Convert.ToDouble(Console.ReadLine());
+            
+            if (radius > 0)
             {
-                float p = s * 4;
-                Console.Write($"\nПериметр квадрата  = {p}");
+                double diameter = radius * 2;
+                Console.WriteLine($"diameter: {diameter}");
             }
             else
-                Console.Write("Введено не верное значение.");
+            {
+                Console.WriteLine("неверно, попробуйте снова");
+            }
         }
     }
 }
