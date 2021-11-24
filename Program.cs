@@ -6,8 +6,19 @@ namespace ConsoleApp1
     {
         static void Main(string[] args)
         {
-            string answer = null;
-            string res = answer == null ? ("answer null") : ("answer не null");
+            //! цикл for
+            for (int i = 1; i <= 10; i++)
+            {
+                Console.WriteLine($"i: {i}");
+            }
+
+            //! цикл while
+            int j = 0;
+            while (j <= 10)
+            {
+                Console.WriteLine($"j: {j}");
+                j++;
+            }
         }
     }
 }
