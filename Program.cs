@@ -6,15 +6,24 @@ namespace ConsoleApp1
     {
         static void Main(string[] args)
         {
-            /// d = sqrt(2Rh)
-            Console.Write("Введите расстояние от земли до глаз наблюдателя: ");
-            double h = Convert.ToDouble(Console.ReadLine());
-            double R = 63.5 * Math.Pow(10, 5); //!6350 = 63,5 * 10^5
-            double d = Math.Sqrt(2 * R * h);
-            Console
-                .WriteLine("Расстояние до линии горизонта от точки с заданной высотой равна: {0}км",
-                Math.Round(d, 0));
-            Console.ReadKey();
+            int startNum = 50;
+            int endNum = 100;
+            Console.WriteLine($"введите целое число от {startNum} до {endNum}");
+
+            int age = Convert.ToInt32(Console.ReadLine());
+            if (age % 2 == 0 && startNum < age && age < endNum)
+            {
+                Console.WriteLine($"число {age} четное");
+            }
+            else if (age % 2 != 0 && startNum < age && age < endNum)
+            {
+                Console.WriteLine($"число : {age} не четноe");
+            }
+            else
+            {
+                Console
+                    .WriteLine($"число : {age} не попадает в диапазон от от {startNum} до {endNum}");
+            }
         }
     }
 }
