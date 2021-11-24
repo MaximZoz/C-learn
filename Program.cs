@@ -6,24 +6,22 @@ namespace ConsoleApp1
     {
         static void Main(string[] args)
         {
-            int startNum = 50;
-            int endNum = 100;
-            Console.WriteLine($"введите целое число от {startNum} до {endNum}");
-
-            int age = Convert.ToInt32(Console.ReadLine());
-            if (age % 2 == 0 && startNum < age && age < endNum)
+            Console.WriteLine("Введите число");
+            int num = Convert.ToInt32(Console.ReadLine());
+            string str = String.Empty;
+            if (num == 1)
             {
-                Console.WriteLine($"число {age} четное");
+                str = "один";
             }
-            else if (age % 2 != 0 && startNum < age && age < endNum)
+            else if (num == 2)
             {
-                Console.WriteLine($"число : {age} не четноe");
+                str = "два";
             }
             else
             {
-                Console
-                    .WriteLine($"число : {age} не попадает в диапазон от от {startNum} до {endNum}");
+                str = "не один и не два ";
             }
+            Console.WriteLine($"вы ввели: {str}");
         }
     }
 }
