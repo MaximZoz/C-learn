@@ -1,7 +1,10 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+
 namespace HomeWork
 {
-    struct employees
+    struct Employee
     {
         public string surname;
 
@@ -25,8 +28,7 @@ namespace HomeWork
             Console.WriteLine($"Введите количество сотрудников: ");
             quantity = SetValueForValidator();
 
-            employees[] surnames = new employees[quantity];
-            employees[] salaries = new employees[quantity];
+            Employee[] employees = new Employee[quantity];
 
             for (int i = 0; i < quantity; i++)
             {
@@ -44,35 +46,47 @@ namespace HomeWork
                     Console
                         .WriteLine($"Введите фамилию последнего сотрудника: ");
                 }
-                surnames[i].surname = Convert.ToString(Console.ReadLine());
-
-                string surname = surnames[i].surname;
+                employees[i].surname = Convert.ToString(Console.ReadLine());
+                string surname = employees[i].surname;
                 Console.WriteLine($"Введите зарплату сотрудника {surname}: ");
 
-                salaries[i].salaries = SetValueForValidator();
+                employees[i].salaries = SetValueForValidator();
             }
 
-            Console.WriteLine("1,2,3,4");
-            string str = CallSortingMethod();
+            Console.WriteLine("как вы хотите отображать сотрудников?");
+            Console.WriteLine("1 - сортировать по фамилии");
+            Console.WriteLine("2 - сортировать по зарплате");
+            Console.WriteLine("3 - показать тех у кого зарплата выше средней");
+            Console.WriteLine("4 - показать тех у кого зарплата ниже средней");
+
+
+            IEnumerable<Employee> resultEmployees = CallSortingMethod(employees);
 
             Console.WriteLine("N     |      Фамилия         | Зарплата |");
             Console.WriteLine("----------------------------------------");
-            for (int column = 0; column < quantity; column++)
+
+            foreach (var item in resultEmployees.Select((value, i) => new { i, value }))
             {
+                var value = item.value;
+                var index = item.i;
+
                 Console
-                    .WriteLine($"{column + 1,-5} | " +
-                    $"{surnames[column].surname,-20}" +
+                    .WriteLine($"{index + 1,-5} | " +
+                    $"{value.surname,-20}" +
                     " | " +
-                    $"{salaries[column].salaries,-8}" +
+                    $"{value.salaries,-8}" +
                     " | ");
                 Console.WriteLine("----------------------------------------");
             }
-            Console.Read();
+
+
         }
 
-        static string CallSortingMethod()
+        static IEnumerable<Employee> CallSortingMethod(Employee[] employees)
         {
+            IEnumerable<Employee> resultEmployees;
             byte num;
+            float averageSalaries = employees.Sum(e => (float)e.salaries) / employees.Length;
             try
             {
                 num = Convert.ToByte(Console.ReadLine());
@@ -81,31 +95,30 @@ namespace HomeWork
             {
                 num = 5;
             }
-            string str;
             switch (num)
             {
-                case (byte)SortName.Alphabet:
-                    str = "Алфавит";
+                case (byte)SortName.Alphabet: //!" сортировать по фамилии"
+                    resultEmployees = employees.OrderBy(e => e.surname);
                     break;
-                case (byte)SortName.Salary:
-                    str = "Зарплата";
+                case (byte)SortName.Salary: //!" сортировать по зарплате"
+                    resultEmployees = employees.OrderBy(e => -e.salaries);
                     break;
-                case (byte)SortName.SalaryMoreAverage:
-                    str = "Зарплата выше среднего";
+                case (byte)SortName.SalaryMoreAverage: //!" сортировать по зарплате выше среднего"
+
+                    resultEmployees = employees.Where(e => e.salaries > averageSalaries).OrderBy(e => -e.salaries);
+
                     break;
-                case (byte)SortName.SalaryLessAverage:
-                    str = "Зарплата ниже среднего";
+                case (byte)SortName.SalaryLessAverage: //!"сортировать по зарплате ниже среднего"
+                    resultEmployees = employees.Where(e => e.salaries < averageSalaries).OrderBy(e => e.salaries);
                     break;
                 default:
-                    str = "";
+                    Console.WriteLine("неправильно, попробуйте снова");
+                    resultEmployees = employees.OrderBy(e => e.salaries);
+                    CallSortingMethod(employees);
                     break;
             }
-            if (str == "")
-            {
-                Console.WriteLine("неправильно, попробуйте снова");
-                CallSortingMethod();
-            }
-            return str;
+
+            return resultEmployees;
         }
 
         static int SetValueForValidator()
@@ -120,7 +133,6 @@ namespace HomeWork
                 {
                     Console.WriteLine("Зарплата не может быть отрицательной!");
                     SetValueForValidator();
-                    // val = 1;
                 }
             }
             catch
