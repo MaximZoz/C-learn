@@ -1,18 +1,19 @@
 ﻿using System;
-using System.Text;
+using System.Timers;
 
 namespace ConsoleApp1
-// ДЕЛЕГАТЫ
+// События и обобщённые делегаты Action, Func
 {
+    public class CarArgs : EventArgs
+    {
+    }
+
     public class Car
     {
-        private int _speed = 0;
+        private int _speed;
 
-        public delegate void
-            TooFast(int currentSpeed); // объявляем делегат который описывает метод, который будет вызываться 
+        public event EventHandler<CarArgs> TooFastDriving; // так можно объявить делегат с помощью event
 
-
-        private TooFast _tooFast; // заносим делегат в приватную переменную класса 
 
         public void Start()
         {
@@ -24,18 +25,13 @@ namespace ConsoleApp1
             _speed += 10;
             if (_speed > 80)
             {
-                _tooFast(_speed); // вызываем делегат, когда это нужно
+                TooFastDriving?.Invoke(this, new CarArgs()); // вызываем делегат, когда это нужно     
             }
         }
 
         public void Stop()
         {
             _speed = 0;
-        }
-
-        public void RegisterOnTooFast(TooFast tooFast) // метод обработчик делегата
-        {
-            this._tooFast = tooFast; // запоминаем делегат в филду
         }
     }
 
@@ -45,17 +41,33 @@ namespace ConsoleApp1
 
         public static void Main(string[] args)
         {
+            var timer = new Timer();
+            timer.Elapsed += Timmer_Elapsed;
+            timer.Interval = 5000;
+            timer.Start();
+            Console.ReadLine();
+
+
             _car = new Car();
-            _car.RegisterOnTooFast(HandleOnTooFast);
+            _car.TooFastDriving += HandleOnTooFast;
+
 
             _car.Start();
             for (var i = 0; i < 10; i++)
             {
                 _car.Accelerate();
             }
+
+            Console.WriteLine("снимаем ограничитель");
+            _car.TooFastDriving -= HandleOnTooFast;
         }
 
-        private static void HandleOnTooFast(int speed)
+        private static void Timmer_Elapsed(object sender, ElapsedEventArgs e)
+        {
+            Console.WriteLine("handling timer elapsed event");
+        }
+
+        private static void HandleOnTooFast(object sender, CarArgs speed)
         {
             Console.WriteLine($"слишком быстро, ваша скорость = {speed} км/ч, я экстренно торможу");
             _car.Stop();
