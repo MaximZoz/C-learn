@@ -1,10 +1,10 @@
 {
   "version": 2,
-  "dgSpecHash": "pDoJQ43+OiDqgwrWRu7aiF7qV65oxklOjXhknPPkPBuAvyGac+htZqwsK6zHQj2RpGHWXqZClU/93Yxzt3SwBw==",
+  "dgSpecHash": "jP30JJc6G/PU9k1HOYV93EF+7MqiErgBSCOfKT7QnH+Br0nungnn5Jsr163JjAJ8ehK9AwGuOm9InG/ZiDVLjg==",
   "success": true,
-  "projectFilePath": "C:\\myProject\\C#_project\\ConsoleApp1\\ConsoleApp1.csproj",
+  "projectFilePath": "C:\\myProject\\learn\\C_sharp_learn\\ConsoleApp1.csproj",
   "expectedPackageFiles": [
-    "C:\\Users\\m.zozulya\\.nuget\\packages\\microsoft.netcore.app.host.win-x64\\3.1.21\\microsoft.netcore.app.host.win-x64.3.1.21.nupkg.sha512"
+    "C:\\Users\\m.zozulya\\.nuget\\packages\\microsoft.netcore.app.host.win-x64\\3.1.22\\microsoft.netcore.app.host.win-x64.3.1.22.nupkg.sha512"
   ],
   "logs": []
 }

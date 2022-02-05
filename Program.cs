@@ -2,47 +2,63 @@
 using System.Text;
 
 namespace ConsoleApp1
+// ДЕЛЕГАТЫ
 {
-    public static class Program
+    public class Car
     {
-        private static TicTacToeGame G = new TicTacToeGame();
+        private int _speed = 0;
 
-        private static void Main()
+        public delegate void
+            TooFast(int currentSpeed); // объявляем делегат который описывает метод, который будет вызываться 
+
+
+        private TooFast _tooFast; // заносим делегат в приватную переменную класса 
+
+        public void Start()
         {
-            Console.WriteLine(GetPrintableState());
-            while (G.GetWinner() == Winner.GameIsUnfinished)
-            {
-                var index = int.Parse(Console.ReadLine() ?? string.Empty);
-                G.MakeMove(index);
-                Console.WriteLine();
-                Console.WriteLine(GetPrintableState());
-            }
-
-            Console.WriteLine($"Result: {G.GetWinner()}");
+            _speed = 10;
         }
 
-        private static string GetPrintableState()
+        public void Accelerate()
         {
-            var sb = new StringBuilder();
-            for (var i = 1; i <= 7; i += 3)
+            _speed += 10;
+            if (_speed > 80)
             {
-                sb.AppendLine("     |     |     |")
-                    .AppendLine($"  {GetPrintableChar(i)}  |  {GetPrintableChar(i + 1)}  |  {GetPrintableChar(i + 2)}  |")
-                    .AppendLine("_____|_____|_____|");
+                _tooFast(_speed); // вызываем делегат, когда это нужно
             }
-
-            return sb.ToString();
         }
 
-        private static string GetPrintableChar(int index)
+        public void Stop()
         {
-            var state = G.GetState(index);
-            if (state == State.Unset)
-            {
-                return index.ToString();
-            }
+            _speed = 0;
+        }
 
-            return state == State.Cross ? "X" : "O";
+        public void RegisterOnTooFast(TooFast tooFast) // метод обработчик делегата
+        {
+            this._tooFast = tooFast; // запоминаем делегат в филду
+        }
+    }
+
+    internal static class Program
+    {
+        private static Car _car;
+
+        public static void Main(string[] args)
+        {
+            _car = new Car();
+            _car.RegisterOnTooFast(HandleOnTooFast);
+
+            _car.Start();
+            for (var i = 0; i < 10; i++)
+            {
+                _car.Accelerate();
+            }
+        }
+
+        private static void HandleOnTooFast(int speed)
+        {
+            Console.WriteLine($"слишком быстро, ваша скорость = {speed} км/ч, я экстренно торможу");
+            _car.Stop();
         }
     }
 }

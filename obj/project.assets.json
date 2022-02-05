@@ -13,11 +13,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\myProject\\C#_project\\ConsoleApp1\\ConsoleApp1.csproj",
+      "projectUniqueName": "C:\\myProject\\learn\\C_sharp_learn\\ConsoleApp1.csproj",
       "projectName": "ConsoleApp1",
-      "projectPath": "C:\\myProject\\C#_project\\ConsoleApp1\\ConsoleApp1.csproj",
+      "projectPath": "C:\\myProject\\learn\\C_sharp_learn\\ConsoleApp1.csproj",
       "packagesPath": "C:\\Users\\m.zozulya\\.nuget\\packages\\",
-      "outputPath": "C:\\myProject\\C#_project\\ConsoleApp1\\obj\\",
+      "outputPath": "C:\\myProject\\learn\\C_sharp_learn\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\m.zozulya\\AppData\\Roaming\\NuGet\\NuGet.Config",
@@ -58,7 +58,7 @@
         "downloadDependencies": [
           {
             "name": "Microsoft.NETCore.App.Host.win-x64",
-            "version": "[3.1.21, 3.1.21]"
+            "version": "[3.1.22, 3.1.22]"
           }
         ],
         "frameworkReferences": {
@@ -66,7 +66,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\6.0.100\\RuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\6.0.101\\RuntimeIdentifierGraph.json"
       }
     }
   }
