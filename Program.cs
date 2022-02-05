@@ -1,76 +1,54 @@
 ﻿using System;
-using System.Timers;
 
 namespace ConsoleApp1
-// События и обобщённые делегаты Action, Func
 {
-    public class CarArgs : EventArgs
+    public static class Program
     {
-    }
-
-    public class Car
-    {
-        private int _speed;
-
-        public event EventHandler<CarArgs> TooFastDriving; // так можно объявить делегат с помощью event
-
-
-        public void Start()
+        private static void Main()
         {
-            _speed = 10;
+            var game = new StickGame(20, Player.Human);
+
+            game.MachinePlayed += Game_MachinePlayed;
+            game.HumanTurnToMakeMove += Game_HumanTurnToMakeMove;
+            game.EndOfGame += Game_EndOfGame;
+            game.Start();
         }
 
-        public void Accelerate()
+        #region Methods
+
+        private static void Game_HumanTurnToMakeMove(object sender, int remainingSticks)
         {
-            _speed += 10;
-            if (_speed > 80)
+            Console.WriteLine($"осталось палок: {remainingSticks} ");
+            Console.WriteLine("возьмите несколько палок");
+            var takenCorrectly = false;
+            while (!takenCorrectly)
             {
-                TooFastDriving?.Invoke(this, new CarArgs()); // вызываем делегат, когда это нужно     
+                if (!int.TryParse(Console.ReadLine(), out var takenSticks)) continue;
+                var game = (StickGame)sender;
+                try
+                {
+                    game.HumanTakes(takenSticks);
+                    takenCorrectly = true;
+                }
+                catch (ArgumentException e)
+                {
+                    Console.WriteLine(e.Message);
+                }
             }
         }
 
-        public void Stop()
+
+        private static void Game_MachinePlayed(int takenSticks)
         {
-            _speed = 0;
-        }
-    }
-
-    internal static class Program
-    {
-        private static Car _car;
-
-        public static void Main(string[] args)
-        {
-            var timer = new Timer();
-            timer.Elapsed += Timmer_Elapsed;
-            timer.Interval = 5000;
-            timer.Start();
-            Console.ReadLine();
-
-
-            _car = new Car();
-            _car.TooFastDriving += HandleOnTooFast;
-
-
-            _car.Start();
-            for (var i = 0; i < 10; i++)
-            {
-                _car.Accelerate();
-            }
-
-            Console.WriteLine("снимаем ограничитель");
-            _car.TooFastDriving -= HandleOnTooFast;
+            Console.WriteLine($"Машина взяла {takenSticks}");
         }
 
-        private static void Timmer_Elapsed(object sender, ElapsedEventArgs e)
+
+        private static void Game_EndOfGame(Player player)
         {
-            Console.WriteLine("handling timer elapsed event");
+            Console.WriteLine($"победил: {player}");
         }
 
-        private static void HandleOnTooFast(object sender, CarArgs speed)
-        {
-            Console.WriteLine($"слишком быстро, ваша скорость = {speed} км/ч, я экстренно торможу");
-            _car.Stop();
-        }
+        #endregion
     }
 }
