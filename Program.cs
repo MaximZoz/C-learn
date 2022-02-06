@@ -1,4 +1,7 @@
 ﻿using System;
+using System.IO;
+using System.Linq;
+using OfficeOpenXml;
 
 namespace ConsoleApp1
 {
@@ -6,49 +9,58 @@ namespace ConsoleApp1
     {
         private static void Main()
         {
-            var game = new StickGame(20, Player.Human);
-
-            game.MachinePlayed += Game_MachinePlayed;
-            game.HumanTurnToMakeMove += Game_HumanTurnToMakeMove;
-            game.EndOfGame += Game_EndOfGame;
-            game.Start();
+            MinMaxSumAvarage(
+                @"../../../112 Top100ChessPlayers.xlsx");
         }
 
-        #region Methods
-
-        private static void Game_HumanTurnToMakeMove(object sender, int remainingSticks)
+        static void MinMaxSumAvarage(string file)
         {
-            Console.WriteLine($"осталось палок: {remainingSticks} ");
-            Console.WriteLine("возьмите несколько палок");
-            var takenCorrectly = false;
-            while (!takenCorrectly)
+            ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
+            var excel = new ExcelPackage(new FileInfo(file));
+            const string newFile = @"../../../Top10_Chess_Players.xlsx";
+            var newExcel = new ExcelPackage(new FileInfo(newFile));
+            newExcel.Workbook.Properties.Author = "Zozulya";
+            newExcel.Workbook.Properties.Title = "Top10_Chess_Players";
+            newExcel.Workbook.Properties.Created = DateTime.Now;
+            var newWorksheet = newExcel.Workbook.Worksheets.Add("Top10");
+
+
+            var worksheet = excel.Workbook.Worksheets[0];
+            var colCount = worksheet.Dimension.End.Column;
+            var rowCount = worksheet.Dimension.End.Row;
+            var arr = new string[rowCount];
+            for (var row = 1; row <= rowCount; row++)
             {
-                if (!int.TryParse(Console.ReadLine(), out var takenSticks)) continue;
-                var game = (StickGame)sender;
-                try
+                var value = "";
+
+                for (var col = 1; col <= colCount; col++)
                 {
-                    game.HumanTakes(takenSticks);
-                    takenCorrectly = true;
+                    //показывает все значения по  row и column
+
+                    // Console.WriteLine(" Row:" + row + " column:" + col + " Value:" +
+                    //                   worksheet.Cells[row, col].Value?.ToString()?.Trim());
+
+                    value += worksheet.Cells[row, col].Value?.ToString()?.Trim();
                 }
-                catch (ArgumentException e)
-                {
-                    Console.WriteLine(e.Message);
-                }
+
+                arr[row - 1] = value;
             }
+
+
+            var list = arr
+                .Skip(2)
+                .Select(ChessPlayer.ParseFideCsv)
+                .Where(player => player.BirthYear > 1988)
+                .OrderByDescending(player => player.Rating)
+                .Take(10)
+                .ToList();
+            Console.WriteLine($"The lowest rating in top 10: {list.Min(x => x.Rating)}");
+            Console.WriteLine($"The hightest rating in top 10: {list.Max(x => x.Rating)}");
+            Console.WriteLine($"The average rating in top 10: {list.Average(x => x.Rating)}");
+
+            newWorksheet.Cells["A1"].LoadFromCollection(list, true);
+
+            newExcel.Save();
         }
-
-
-        private static void Game_MachinePlayed(int takenSticks)
-        {
-            Console.WriteLine($"Машина взяла {takenSticks}");
-        }
-
-
-        private static void Game_EndOfGame(Player player)
-        {
-            Console.WriteLine($"победил: {player}");
-        }
-
-        #endregion
     }
 }
