@@ -17,14 +17,6 @@ namespace ConsoleApp1
         {
             ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
             var excel = new ExcelPackage(new FileInfo(file));
-            const string newFile = @"../../../Top10_Chess_Players.xlsx";
-            var newExcel = new ExcelPackage(new FileInfo(newFile));
-            newExcel.Workbook.Properties.Author = "Zozulya";
-            newExcel.Workbook.Properties.Title = "Top10_Chess_Players";
-            newExcel.Workbook.Properties.Created = DateTime.Now;
-            var newWorksheet = newExcel.Workbook.Worksheets.Add("Top10");
-
-
             var worksheet = excel.Workbook.Worksheets[0];
             var colCount = worksheet.Dimension.End.Column;
             var rowCount = worksheet.Dimension.End.Row;
@@ -58,9 +50,19 @@ namespace ConsoleApp1
             Console.WriteLine($"The hightest rating in top 10: {list.Max(x => x.Rating)}");
             Console.WriteLine($"The average rating in top 10: {list.Average(x => x.Rating)}");
 
-            newWorksheet.Cells["A1"].LoadFromCollection(list, true);
+            // Еще какие есть методы в Link
+            Console.WriteLine($"первый: {list.First()?.FirstName}"); // первый метод в link или исключение если нет 
+            Console.WriteLine(
+                $"последний: {list.Last()?.FirstName}"); // последний метод в link или исключение если нет 
 
-            newExcel.Save();
+            Console.WriteLine(
+                $"первый по условию: {list.First(player => player.Country == "USA")?.FirstName}"); // первый метод в link или исключение если нет
+            var firstFromDefault = list.FirstOrDefault()?.FirstName; // не выбрасывает исключение (первый или null)
+            Console.WriteLine(firstFromDefault);
+            // Console.WriteLine(
+            //     $" если расчитываем получить иcключение :{list.Single(player => player.Country == "FRF")?.FirstName}");
+            Console.WriteLine(
+                $" выбрасывает исключение если более одного совпадения :{list.SingleOrDefault(player => player.Country == "USA")?.FirstName}");
         }
     }
 }
